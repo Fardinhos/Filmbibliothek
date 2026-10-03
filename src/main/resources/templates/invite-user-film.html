@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Invite User to Film</title>
+    <link rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.css"/>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <!--CSS found here https://codepen.io/hesguru/pen/BaybqXv for 5 stars -->
+    <link rel="stylesheet" th:href="@{/secondarycss.css}"/>
+    <link rel="stylesheet" th:href="@{/maincss.css}"/>
+
+</head>
+
+<body>
+
+<div style="display: flex; flex-direction: column">
+    <div class="container">
+
+        <div style="display: flex;flex-direction: row">
+            <form th:action="@{/logout}" method="post">
+                <input type="submit" value="Logout"/>
+            </form>
+
+            <form th:action="@{/}" method="get">
+                <input type="submit" value="Back"/>
+            </form>
+        </div>
+
+
+        <hr/>
+
+        <table class="table table-bordered table-striped" id="film-table">
+            <thead>
+            <tr>
+                <th>User</th>
+                <th>Film</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${user.email}"></td>
+                <td th:text="${film.name}"></td>
+
+            </tr>
+
+            </tbody>
+        </table>
+
+        <form th:action="@{/createInvitation}" method="post">
+            <input name="userId" style="display: none" th:value="${user.getId()}"/>
+            <input name="filmId" style="display: none" th:value="${film.getId()}"/>
+
+            <input type="datetime-local" name="date" placeholder="Date"/>
+            <input type='text' placeholder="Remark" name="remark"/>
+            <button type="submit">Invite</button>
+        </form>
+
+
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.js"></script>
+</body>
+</html>

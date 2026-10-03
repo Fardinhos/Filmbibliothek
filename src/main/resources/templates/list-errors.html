@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reported Film Errors</title>
+    <link rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.css"/>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <!--CSS found here https://codepen.io/hesguru/pen/BaybqXv for 5 stars -->
+    <link rel="stylesheet" th:href="@{/maincss.css}"/>
+</head>
+
+<body>
+
+
+<div class="container">
+    <div style="display: flex;flex-direction: row;justify-content: space-around">
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Logout"/>
+        </form>
+
+        <form th:action="@{/}" method="get">
+            <input type="submit" value="Back"/>
+        </form>
+    </div>
+    <hr/>
+
+
+   <div class="container card">
+       <div class="card-header">
+           <h6 class="card-title">
+               Reported Errors
+           </h6>
+       </div>
+
+       <div class="card-body">
+           <table class="table table-bordered table-striped" id="errors-table">
+               <thead>
+               <tr>
+                   <th>Reported By</th>
+                   <th>Reported Film</th>
+                   <th>Reported At</th>
+                   <th>Description</th>
+                   <th></th>
+
+               </tr>
+
+               </thead>
+               <tbody>
+               <tr th:each="error: ${errors}">
+                   <td>
+                       <a th:text="${error.getReportedBy().getFirstName()+' '+error.getReportedBy().getLastName()}"
+                          type="button" th:href="@{/showUser(userId=${error.getReportedBy().id})}">
+                       </a>
+                   </td>
+                   <td>
+                       <a th:text="${error.getFilm().getName()}"
+                          type="button" th:href="@{/showFilm(filmId=${error.getFilm().id})}">
+                       </a>
+                   </td>
+
+                   <td th:text="${error.getReportedAt()}">
+                   </td>
+
+
+                   <td
+                           th:if="${error.getErrorMessage() != null}"
+                           th:text="${error.getErrorMessage()}">
+                   </td>
+
+                   <td th:if="${error.getErrorMessage() == null}">
+                   </td>
+
+                   <td>
+                       <form th:action="@{/resolveError(errorId=${error.id})}" method=POST>
+                           <button type="submit" class="btn btn-primary mb-2">Resolve</button>
+                       </form>
+                   </td>
+               </tr>
+
+               </tbody>
+           </table>
+       </div>
+   </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.js"></script>
+
+</body>
+</html>

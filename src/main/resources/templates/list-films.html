@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>List Films</title>
+    <link rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.css"/>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <!--CSS found here https://codepen.io/hesguru/pen/BaybqXv for 5 stars -->
+    <link rel="stylesheet" th:href="@{/maincss.css}"/>
+</head>
+
+<body>
+
+<div style="display: flex; flex-direction: column">
+
+    <div style="display: flex;flex-direction: row;justify-content: space-around">
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Logout"/>
+        </form>
+
+        <form th:action="@{/}" method="get">
+            <input type="submit" value="Back"/>
+        </form>
+    </div>
+    <hr/>
+    <div class="container card">
+        <div class="card-header">
+            <h6 class="card-title">
+                Watch List
+            </h6>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-bordered table-striped" id="watchlist-films-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th></th>
+
+                </thead>
+                <tbody>
+                <tr th:each="film: ${user.getWatchList()}">
+                    <td>
+                        <a th:text="${film.name}"
+                           type="button"
+                           th:href="@{/showFilm(filmId=${film.id})}">
+                        </a>
+                    </td>
+                    <td>
+                        <a th:href="@{/watchedFilm(filmId=${film.id})}"
+                           class="btn btn-outline-success ml-2">Watched</a>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container card">
+        <div class="card-header">
+            <h6 class="card-title">
+                Watched movies
+            </h6>
+        </div>
+
+        <div class="card-body">
+            <table class="table table-bordered table-striped" id="watched-films-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Rating Text (Optional)</th>
+                    <th>Rating</th>
+
+                </thead>
+                <tbody>
+                <tr th:each="filmRating,index: ${user.getFilmsRatings()}">
+                    <form th:action="@{/rateFilm}" method=POST th:name="ratingForm+${index}">
+                        <td>
+                            <a th:text="${filmRating.getFilm().name}"
+                               type="button"
+                               th:href="@{/showFilm(filmId=${
+                            filmRating.getFilm().getId()})}">
+                            </a>
+                        </td>
+                        <td>
+                            <input placeholder="Rating Text" type="text"
+                                   th:id="ratingText+${index}"
+                                   th:value="${filmRating.getComment()}"
+                                   th:name="ratingText">
+                            <!-- Hidden input to send with form -->
+                            <input style="display: none" type="text" th:id="filmId+${index}"
+                                   th:value="${filmRating.getFilm().getId()}"
+                                   th:name="filmId">
+                        </td>
+                        <td>
+                            <div class="rate">
+                                <input type="radio" th:id="star5+${index}" name="rate"
+                                       value="5"
+                                       th:checked="${filmRating.getRating() == 5}"/>
+                                <label th:for="star5+${index}" title="text">5 stars</label>
+                                <input type="radio" th:id="star4+${index}" name="rate" value="4"
+                                       th:checked="${filmRating.getRating() == 4}"/>
+                                <label th:for="star4+${index}" title="text">4 stars</label>
+                                <input type="radio" th:id="star3+${index}" name="rate" value="3"
+                                       th:checked="${filmRating.getRating() == 3}"/>
+                                <label th:for="star3+${index}" title="text">3 stars</label>
+                                <input type="radio" th:id="star2+${index}" name="rate" value="2"
+                                       th:checked="${filmRating.getRating() == 2}"/>
+                                <label th:for="star2+${index}" title="text">2 star</label>
+                                <input type="radio" th:id="star1+${index}" name="rate" value="1"
+                                       th:checked="${filmRating.getRating() == 1}"/>
+                                <label th:for="star1+${index}" title="text">1 star</label>
+                            </div>
+                            <button type="submit" class="btn  ml-2">Rate</button>
+                        </td>
+                    </form>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container">
+        <div class="container card">
+            <div class="card-header">
+                <h6 class="card-title">
+                    List Films
+                </h6>
+                <a
+                        th:if="${user.getAdmin()}"
+                        th:href="@{/addFilmForm}" class="btn btn-primary mb-2">Add Film</a>
+                <!--Try to change to saveFilms if you have unknown errors -->
+                <form th:action="@{/saveFilms}"
+                      th:if="${user.getAdmin()}"
+                      method=POST>
+                    <input placeholder="Category" type="text" id="category" name="category">
+                    <input placeholder="Publishing Date" type="text" id="pubDate" name="pubDate">
+                    <button type="submit" class="btn btn-primary mb-2">Add Auto</button>
+                </form>
+
+                <form th:action="@{/filterFilms}" method=POST>
+                    <input placeholder="Category filter" type="text" id="categoryFilter" name="categoryFilter">
+                    <input placeholder="Publishing Date filter" type="text" id="pubDateFilter" name="pubDateFilter">
+                    <input placeholder="Cast filter" type="text" id="castFilter" name="castFilter">
+                    <input placeholder="Name filter" type="text" id="nameFilter" name="nameFilter">
+
+                    <button type="submit" class="btn btn-primary mb-2">Filter</button>
+                </form>
+            </div>
+
+            <div class="card-body">
+                <table class="table table-bordered table-striped" id="film-table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Length</th>
+                        <th>Publish Date</th>
+                        <th>Director</th>
+                        <!--<th>Script Author</th>-->
+                        <th>Cast</th>
+                        <th>Banner</th>
+                        <th>Actions</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                    <tr th:each="film: ${films}">
+                        <td>
+                            <a th:text="${film.name}" type="button" th:href="@{/showFilm(filmId=${film.id})}">
+                            </a>
+                        </td>
+                        <td th:text="${film.category}"></td>
+                        <td th:text="${film.length}"></td>
+                        <td th:text="${film.pubDate}"></td>
+                        <td th:text="${film.director}"></td>
+                        <!--<td th:text="${film.scriptAuthor}"></td>-->
+                        <td th:text="${film.cast}"></td>
+                        <td>
+
+                            <img
+                                    th:if="${filmIdToBannerMap.get(film.id) != null}"
+                                    th:src="${'data:image/png;base64,'+filmIdToBannerMap.get(film.id)}"
+                                    style="width: 50px;height: 50px">
+
+                        </td>
+                        <td>
+                            <div style="display: flex;flex-direction: column;justify-content: center;
+                                    align-items: center">
+                                <a
+                                        style="margin: 5px"
+                                        th:if="${user.getAdmin()}"
+                                        th:href="@{/showUpdateForm(filmId=${film.id})}" class="btn btn-info">Update</a>
+                                <a
+                                        style="margin: 5px"
+                                        th:if="${user.getAdmin()}"
+                                        th:href="@{/deleteFilm(filmId=${film.id})}"
+                                        class="btn btn-danger ml-2">Delete</a>
+                                <a style="margin: 5px"
+                                   th:if="${!user.getAdmin()}"
+                                   th:href="@{/showReportError(filmId=${film.id})}" class="btn btn-danger  ml-2">Report
+                                    Error</a>
+                                <a style="margin: 5px"
+                                   th:if="${!user.getAdmin()}"
+                                   th:href="@{/addToWatchList(filmId=${film.id})}" class="btn  ml-2">Add to
+                                    Watchlist</a>
+                            </div>
+
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#film-table").DataTable({
+            'aoColumnDefs': [{
+                'bSortable': false,
+                'aTargets': [-1]
+            }]
+        });
+    })
+</script>
+</body>
+</html>

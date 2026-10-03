@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Sign Up - CodeJava</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container text-center">
+    <div>
+        <h1>User Registration</h1>
+    </div>
+
+    <form th:action="@{/process_register}" method="post"
+          style="max-width: 600px; margin: 0 auto;"
+          enctype="multipart/form-data"
+    >
+        <div class="m-3">
+            <div class="form-group row">
+                <label class="" col-form-Label col-4> E-Mail</label>
+                <div class="col-8">
+                    <input type="email" class="form-control" name="email" required/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="" col-form-Label col-4> Password</label>
+                <div class="col-8">
+                    <input type="password" class="form-control" name="password" required
+                           minlength="6" maxlength="10"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="" col-form-Label col-4> Name</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" name="firstName" required
+                           minlength="2" maxlength="20"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="" col-form-Label col-4> Surname</label>
+                <div class="col-8">
+                    <input type="text" class="form-control" name="lastName" required
+                           minlength="2" maxlength="20"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="" col-form-Label col-4> Birthdate</label>
+                <div class="col-8">
+                    <input type="date" class="form-control" name="birthDate" required
+                           minlength="2" maxlength="20"/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="" col-form-Label col-4> Profile Picture (Optional)</label>
+                <div class="col-8">
+                    <input type="file" class="form-control" name="profilePic"/>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Register</button>
+
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>>

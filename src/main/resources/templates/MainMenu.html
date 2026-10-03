@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Willkommen</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container text-center">
+    <div>
+        <h1>Main Menu</h1>
+    </div>
+    <div th:if="${currentUser != null && currentUser.getAdmin()}">
+        <h2>Admin Options</h2>
+        <h3><a th:href="@{/listErrors}">Reported Errors</a></h3>
+        <hr>
+    </div>
+    <div th:if="${currentUser != null}">
+        <h2>User Options</h2>
+        <h3><a th:href="@{/showCurrentUser}">Profile</a></h3>
+        <h3 th:if="${!currentUser.getAdmin()}"><a th:href="@{/goToUserStatistic}">User Statistic</a></h3>
+        <hr>
+
+        <h2>Films Options</h2>
+        <h3><a th:href="@{/showFilms}">List of Movies</a></h3>
+        <h3 th:if="${!currentUser.getAdmin()}"><a th:href="@{/listRecommendedFilms}">Recommendations</a></h3>
+        <hr>
+
+        <h2>Social</h2>
+        <h3><a th:href="@{/listUsers}">List of Users</a></h3>
+        <h3 th:if="${!currentUser.getAdmin()}"><a th:href="@{/listGroups}">Groups</a></h3>
+        <hr>
+
+        <form th:action="@{/logout}" method="post">
+            <h3><button type="submit" class="btn-link">Logout</button></h3>
+        </form>
+
+
+    </div>
+    <hr>
+    <div th:if="${currentUser == null}">
+        <h3><a th:href="@{register/admin}">Register (Admin)</a></h3>
+        <hr>
+        <h3><a th:href="@{register/user}">Register (User)</a></h3>
+        <h3><a th:href="@{/login}">Login</a></h3>
+    </div>
+</div>
+</body>
+</html>
+
+<style>
+    /*<!-- https://stackoverflow.com/questions/8169027/how-can-i-submit-a-post-form-using-the-a-href-tag-->*/
+    .btn-link {
+        border: none;
+        outline: none;
+        background: none;
+        cursor: pointer;
+        color: #0000EE;
+        padding: 0;
+        font-family: inherit;
+        font-size: inherit;
+    }
+</style>

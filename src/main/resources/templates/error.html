@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ERROR!</title>
+</head>
+<body>
+
+<h1 th:if="${errorMessage != null}" th:text="${errorMessage}"></h1>
+<h1 th:if="${errorMessage == null}"> Unter dieser E-Mail Addresse existiert bereits ein Konto! </h1>
+
+</body>
+</html>

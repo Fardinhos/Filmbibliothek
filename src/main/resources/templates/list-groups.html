@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Groups</title>
+    <link rel="stylesheet"
+          type="text/css"
+          href="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.css"/>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <!--CSS found here https://codepen.io/hesguru/pen/BaybqXv for 5 stars -->
+    <link rel="stylesheet" th:href="@{/maincss.css}"/>
+</head>
+
+<body>
+
+
+
+<div class="container">
+    <div style="display: flex;flex-direction: row;justify-content: space-around">
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Logout"/>
+        </form>
+
+        <form th:action="@{/}" method="get">
+            <input type="submit" value="Back"/>
+        </form>
+    </div>
+    <hr/>
+   <div class="container card">
+       <div class="card-header">
+           <h6 class="card-title">
+               Groups
+           </h6>
+       </div>
+       <div class="card-body">
+           <form th:action="@{/createGroup}" method=POST>
+              <div style="display: flex;flex-direction: row;justify-content: space-between">
+                  <input placeholder="Name" type="text" id="name" name="name">
+                      <div>
+                          <input type="checkbox" name="isPrivate"
+                                 th:text="'Private'"
+                                 placeholder="Private Group">
+                      </div>
+
+                  <button type="submit" class="btn btn-primary mb-2">Create New Group</button>
+              </div>
+           </form>
+           <table class="table table-bordered table-striped" id="groups-table">
+               <thead>
+               <tr>
+                   <th>Name</th>
+                   <th>Admin</th>
+                   <th>Private Group</th>
+               </tr>
+
+               </thead>
+               <tbody>
+               <tr th:each="group: ${groups}">
+                   <td>
+                       <a th:text="${group.name}" type="button" th:href="@{/showGroup(groupId=${group.id})}">
+                       </a>
+                   </td>
+                   <td th:text="${group.admin.firstName+ ' '+group.admin.lastName}">
+
+                   </td>
+                   <td th:text="${group.private?'Private':'Public'}"></td>
+               </tr>
+
+               </tbody>
+           </table>
+       </div>
+   </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.11.5/datatables.min.js"></script>
+
+</body>
+</html>
